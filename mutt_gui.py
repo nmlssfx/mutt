@@ -150,7 +150,11 @@ class MuttApp(ttk.Window):
         super().__init__(title=f"Mutt TTS v{__version__}", themename="cyborg", size=(1020, 860))
         self.minsize(820, 640)
         self._edited = False
+        self._running = False
+        self._cancel = False
+        self._prev = None
         self._build(); self._log()
+        self.protocol("WM_DELETE_WINDOW", self._on_close)
     def _build(self):
         self.columnconfigure(0, weight=7); self.columnconfigure(1, weight=3); self.rowconfigure(1, weight=1)
         f, m = _font, _mono
@@ -535,6 +539,38 @@ class MuttApp(ttk.Window):
         if hasattr(self, '_lh'): logging.getLogger("mutt").removeHandler(self._lh)
         logging.getLogger("gui").removeHandler(self._lh) if hasattr(self, '_lh') else None
         super().destroy()
+
+
+    def _on_close(self):
+        """Сохранить ключи в .env и закрыть окно."""
+        try:
+            from pathlib import Path
+            env_path = _HERE / ".env"
+            lines = []
+            if env_path.exists():
+                lines = env_path.read_text(encoding="utf-8").split("\n")
+            updates = {"MIMO_API_KEY": self.mk.get().strip(),
+                       "OPENROUTER_API_KEY": self.ok.get().strip(),
+                       "GROQ_API_KEY": self.gk.get().strip(),
+                       "OPENAI_API_KEY": self.oak.get().strip(),
+                       "ELEVENLABS_API_KEY": self.ek.get().strip(),
+                       "MISTRAL_API_KEY": self.mk2.get().strip()}
+            for k, v in updates.items():
+                if not v:
+                    continue
+                found = False
+                for i, line in enumerate(lines):
+                    if line.strip().startswith(k + "="):
+                        lines[i] = f"{k}={v}"
+                        found = True
+                        break
+                if not found:
+                    lines.append(f"{k}={v}")
+            if updates:
+                env_path.write_text("\n".join(lines), encoding="utf-8")
+        except Exception:
+            pass
+        self.destroy()
 
 if __name__ == "__main__":
     MuttApp().mainloop()

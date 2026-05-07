@@ -303,8 +303,19 @@ ELEVENLABS_VOICES: dict[str, str] = {
 # ── Mistral ──────────────────────────────────────────────────────
 
 MISTRAL_API_BASE = "https://api.mistral.ai/v1"
-MISTRAL_DEFAULT_MODEL = "mistral-voxtral-tts-26-03"
-MISTRAL_VOICES: dict[str, str] = {"Default (авто)": "default"}  # 20 пресетов через voice cloning API
+MISTRAL_DEFAULT_MODEL = "voxtral-mini-tts-2603"
+MISTRAL_VOICES: dict[str, str] = {
+    "Paul - Sad (муж., EN)": "530e2e20-58e2-45d8-b0a5-4594f4915944",
+    "Paul - Neutral (муж., EN)": "c69964a6-ab8b-4f8a-9465-ec0925096ec8",
+    "Paul - Happy (муж., EN)": "1024d823-a11e-43ee-bf3d-d440dccc0577",
+    "Paul - Frustrated (муж., EN)": "1f017bcb-02e5-460d-989b-db065c0c6122",
+    "Paul - Excited (муж., EN)": "5940190b-f58a-4c3e-8264-a40d63fd6883",
+    "Paul - Confident (муж., EN)": "98559b22-62b5-4a64-a7cd-fc78ca41faa8",
+    "Paul - Cheerful (муж., EN)": "01d985cd-5e0c-4457-bfd8-80ba31a5bc03",
+    "Paul - Angry (муж., EN)": "cb891218-482c-4392-9878-91e8d999d57a",
+    "Oliver - Neutral (муж., EN-GB)": "e3596645-b1af-469e-b857-f18ddedc7652",
+    "Jane - Sarcasm (жен., EN-GB)": "a3e41ea8-020b-44c0-8d8b-f6cc03524e31",
+}
 
 
 # ═══════════════════════════════════════════════════════════════════
@@ -559,8 +570,9 @@ def _synthesize_mistral(config: TTSConfig) -> TTSResult:
     key = config.mistral_api_key or os.environ.get("MISTRAL_API_KEY", "")
     if not key:
         raise ValueError("Укажите API-ключ Mistral.")
+    voice_id = config.mistral_voice or list(MISTRAL_VOICES.values())[0]
     payload = {"model": MISTRAL_DEFAULT_MODEL, "input": config.text,
-               "voice": config.mistral_voice, "response_format": "mp3"}
+               "voice_id": voice_id, "response_format": "mp3"}
     resp = requests.post(f"{MISTRAL_API_BASE}/audio/speech",
                          json=payload, headers={"Authorization": f"Bearer {key}",
                                                 "Content-Type": "application/json"}, timeout=60)
