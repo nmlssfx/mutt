@@ -740,10 +740,9 @@ def synthesize_preview(config: TTSConfig) -> Path:
     """Синтезировать во временный файл для прослушивания."""
     PREVIEW_DIR.mkdir(parents=True, exist_ok=True)
 
-    is_or = config.backend == BACKEND_OPENROUTER
-    preview_path = PREVIEW_DIR / ("preview.mp3" if is_or else "preview.wav")
-
     result = synthesize_tts(config)
+    ext = "mp3" if result.audio_format == "mp3" else "wav"
+    preview_path = PREVIEW_DIR / f"preview.{ext}"
     save_audio(result, preview_path)
     logger.info("🎧 Preview: %s (%d байт)", preview_path, preview_path.stat().st_size)
     return preview_path
