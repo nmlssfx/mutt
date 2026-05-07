@@ -1,0 +1,4 @@
+ttkbootstrap>=1.10.0  # Стильный GUI (тема superhero / darkly)
+requests>=2.31.0       # HTTP-запросы к API
+numpy>=1.24.0          # (опционально) — для обработки PCM16
+pygame>=2.5.0          # Встроенный аудиоплеер (play/pause/стоп/перемотка/громкость)

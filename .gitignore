@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+
+# API keys
+.env
+!env.example
+
+# Logs
+*.log
+session.log
+
+# Temp / test / icons
+test_*
+*.ico
+*.png
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Virtual env
+venv/
+.venv/
