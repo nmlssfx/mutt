@@ -293,6 +293,11 @@ class MuttApp(ttk.Window):
         self._bind_paste(self.mk2)
         ttk.Button(mf_row, text="🔗", width=3, bootstyle="info-outline",
                    command=lambda: webbrowser.open(GET_KEY_URLS["mistral"])).pack(side=LEFT, padx=(0, 4))
+        mfv = ttk.Frame(self.mf); mfv.pack(fill=X, pady=(2, 0))
+        ttk.Label(mfv, text="Голос:", font=f(9, True)).pack(side=LEFT)
+        self.mv = ttk.Combobox(mfv, values=list(MISTRAL_VOICES.keys()),
+                                bootstyle="info", state="readonly", width=38)
+        self.mv.set("Paul - Neutral (муж., EN)"); self.mv.pack(side=LEFT)
         ttk.Label(self.mf, text="💡 9 языков · $16/1M символов", font=f(8), bootstyle="info").pack(anchor=W, pady=(2, 0))
         # ── Voice frames (все сразу) ──
         self.ov = ttk.StringVar(value="alloy"); self.ovr = []
@@ -480,8 +485,9 @@ class MuttApp(ttk.Window):
             return TTSConfig(backend="elevenlabs", el_api_key=self.ek.get().strip(),
                              el_voice=v, user_context=ctx, text=text)
         if bk == "mistral":
+            voice_id = MISTRAL_VOICES.get(self.mv.get(), list(MISTRAL_VOICES.values())[0])
             return TTSConfig(backend="mistral", mistral_api_key=self.mk2.get().strip(),
-                             mistral_voice="default", user_context=ctx, text=text)
+                             mistral_voice=voice_id, user_context=ctx, text=text)
         return TTSConfig(backend=BACKEND_MIMO, text=text)
 
     def _go(self):
