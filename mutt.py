@@ -26,7 +26,7 @@ from typing import Literal
 
 import requests
 
-__version__ = "1.0.0.3"
+__version__ = "1.0.0.4"
 logger = logging.getLogger("mutt")
 
 
@@ -485,6 +485,9 @@ def _synthesize_openrouter(config: TTSConfig) -> TTSResult:
     headers = {
         "Authorization": f"Bearer {key}",
         "Content-Type": "application/json",
+        "HTTP-Referer": "https://github.com/nmlssfx/mutt",
+        "X-OpenRouter-Title": "Mutt",
+        "X-OpenRouter-Categories": "cli-agent,programming-app",
     }
 
     url = f"{OR_API_BASE}/audio/speech"

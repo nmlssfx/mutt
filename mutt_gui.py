@@ -14,8 +14,20 @@ from ttkbootstrap.constants import *
 from ttkbootstrap.dialogs import Messagebox
 from ttkbootstrap.widgets.scrolled import ScrolledText
 
-_HERE = Path(__file__).resolve().parent
+# Detect if running from PyInstaller bundle
+if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPAS'):
+    # Running from EXE - look for .env next to executable
+    _HERE = Path(sys.executable).parent
+else:
+    _HERE = Path(__file__).resolve().parent
 if str(_HERE) not in sys.path: sys.path.insert(0, str(_HERE))
+
+# Load .env from _HERE if exists
+try:
+    import dotenv
+    dotenv.load_dotenv(_HERE / ".env")
+except:
+    pass
 
 # ── URLs получения ключей ──
 GET_KEY_URLS = {
