@@ -4,6 +4,7 @@ __pycache__/
 *.egg-info/
 dist/
 build/
+*.spec
 
 # API keys
 .env
@@ -17,6 +18,9 @@ session.log
 test_*
 *.ico
 *.png
+_mistral_*.mp3
+_mistral_*.txt
+_mistral_*.py
 
 # IDE
 .vscode/
@@ -27,6 +31,9 @@ test_*
 # Virtual env
 venv/
 .venv/
-_*.mp3  
-_*.txt  
-_*.py  
+
+# Build artifacts
+*.exe
+*.pyz
+*.pkg
+_pyinstaller_hooks_contrib/

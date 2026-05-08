@@ -1,49 +1,32 @@
 # -*- mode: python ; coding: utf-8 -*-
 
-from PyInstaller.building.build_main import ANALYSIS, PYZ, EXE
-from PyInstaller.building.datas import TOC
-import os
+from PyInstaller.building.build_main import Analysis, PYZ, EXE
 
 block_cipher = None
 
-# Data files to include
-datas = []
-# Add dist_README.txt as README.txt next to exe
-if os.path.exists(r'D:\clouds\ncloud\Dev\ttsgenerator\dist_README.txt'):
-    datas.append((r'D:\clouds\ncloud\Dev\ttsgenerator\dist_README.txt', '.'))
-
-# Add .env.example as reference
-if os.path.exists(r'D:\clouds\ncloud\Dev\ttsgenerator\.env.example'):
-    datas.append((r'D:\clouds\ncloud\Dev\ttsgenerator\.env.example', '.'))
-
-a = ANALYSIS(
+a = Analysis(
     [r'D:\clouds\ncloud\Dev\ttsgenerator\mutt_gui.py'],
     pathex=[r'D:\clouds\ncloud\Dev\ttsgenerator'],
     binaries=[],
-    datas=datas,
+    datas=[
+        (r'D:\clouds\ncloud\Dev\ttsgenerator\.env.example', '.'),
+        (r'D:\clouds\ncloud\Dev\ttsgenerator\dist_README.txt', '.'),
+    ],
     hiddenimports=[
         'ttkbootstrap',
         'ttkbootstrap.themes',
-        'ttkbootstrap.themes.cosmo',
-        'ttkbootstrap.themes.cyborg',
+        'tkinter',
+        'tkinter.ttk',
         'pygame',
-        'pygame.base',
-        'pygame.constants',
-        'pygame.display',
         'pygame.mixer',
-        'pygame.mixer_music',
         'requests',
         'dotenv',
-        'dotenv.main',
         'mutt',
-        'mutt_cli',
         'presets',
-        'mimetypes',
     ],
     hookspath=[],
-    hooksconfig=[],
     runtime_hooks=[],
-    excludes=['tkinter', 'unittest', 'test', 'pydoc'],
+    excludes=['unittest', 'test'],  # Remove 'tkinter' from excludes!
     win_no_prefer_redirects=False,
     win_private_assemblies=False,
     cipher=block_cipher,
@@ -64,13 +47,11 @@ exe = EXE(
     bootloader_ignore_signals=False,
     strip=False,
     upx=True,
-    upx_exclude=[],
-    runtime_tmpdir=None,
-    console=False,  # Windowed mode
+    console=False,
     disable_windowed_traceback=False,
     argv_emulation=False,
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=None,  # Add: r'D:\clouds\ncloud\Dev\ttsgenerator\icon.ico' if you have one
+    icon=None,
 )
