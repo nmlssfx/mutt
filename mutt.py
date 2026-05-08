@@ -578,8 +578,10 @@ def _synthesize_mistral(config: TTSConfig) -> TTSResult:
                                                 "Content-Type": "application/json"}, timeout=60)
     if resp.status_code != 200:
         raise RuntimeError(f"Mistral API {resp.status_code}: {resp.text[:300]}")
-    logger.info("✓ [Mistral] %d байт", len(resp.content))
-    return TTSResult(audio_data=resp.content, audio_format="mp3")
+    body = resp.json()
+    audio_bytes = base64.b64decode(body["audio_data"])
+    logger.info("✓ [Mistral] %d байт", len(audio_bytes))
+    return TTSResult(audio_data=audio_bytes, audio_format="mp3")
 
 
 # ═══════════════════════════════════════════════════════════════════
