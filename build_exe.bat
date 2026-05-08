@@ -20,17 +20,17 @@ if exist __pycache__ rmdir /s /q __pycache__ &
 if exist *.pyc del /s /q *.pyc &
 
 echo === Building EXE (output to project root) === &
-pyinstaller MuttTTS.spec --distpath=. --workpath=build --clean &
+pyinstaller MuttTTS.spec --distpath=. --workpath=build --clean 2>&1 &
 
-echo === Cleaning up build artifacts === &
+echo === Cleaning build artifacts === &
 if exist build rmdir /s /q build &
-if exist mutt_tts *.tmp del /q mutt_tts *.tmp &
+if exist mutt_tts.tmp del /q mutt_tts.tmp &
 if exist warn-mutt_tts.txt del /q warn-mutt_tts.txt &
 
 echo === Build complete! === &
 if exist "MuttTTS.exe" (
     echo. &
-    echo SUCCESS! EXE created: %CD%\MuttTTS.exe &
+    echo SUCCESS! EXE created at: %CD%\MuttTTS.exe &
     echo. &
     echo Next steps: &
     echo 1. Copy MuttTTS.exe to any folder you want &
