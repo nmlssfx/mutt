@@ -556,7 +556,11 @@ def _synthesize_elevenlabs(config: TTSConfig) -> TTSResult:
     payload = {"text": config.text, "model_id": config.el_model,
                "voice_settings": {"stability": 0.5, "similarity_boost": 0.75}}
     headers = {"xi-api-key": key, "Content-Type": "application/json"}
-    resp = requests.post(url, json=payload, headers=headers, timeout=60)
+    resp = requests.post(url, json=payload, headers=headers, timeout=60, allow_redirects=False)
+    if resp.status_code == 302:
+        raise RuntimeError(
+            "ElevenLabs блокирует доступ по региону "
+            f"(302 -> {resp.headers.get('Location','?')})")
     if resp.status_code != 200:
         raise RuntimeError(f"ElevenLabs API {resp.status_code}: {resp.text[:300]}")
     logger.info("✓ [ElevenLabs] %d байт", len(resp.content))
