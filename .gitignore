@@ -27,3 +27,6 @@ test_*
 # Virtual env
 venv/
 .venv/
+_*.mp3  
+_*.txt  
+_*.py  
