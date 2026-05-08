@@ -744,7 +744,8 @@ def synthesize_preview(config: TTSConfig) -> Path:
 
     result = synthesize_tts(config)
     ext = "mp3" if result.audio_format == "mp3" else "wav"
-    preview_path = PREVIEW_DIR / f"preview.{ext}"
+    import time
+    preview_path = PREVIEW_DIR / f"preview_{int(time.time()*1000)}.{ext}"
     save_audio(result, preview_path)
     logger.info("🎧 Preview: %s (%d байт)", preview_path, preview_path.stat().st_size)
     return preview_path

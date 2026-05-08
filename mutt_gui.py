@@ -103,6 +103,14 @@ class Player(ttk.Frame):
         s = NORMAL if on else DISABLED; self.pb.config(state=s)
     def load(self, p):
         self._stop_poll(); pygame.mixer.music.stop(); pygame.mixer.music.unload()
+        # Удаляем старые превью
+        try:
+            pp = Path(p).parent
+            for f in pp.glob("preview_*"):
+                if f.name != Path(p).name:
+                    f.unlink(missing_ok=True)
+        except:
+            pass
         self._file = Path(p)
         try:
             pygame.mixer.music.load(str(self._file))
